@@ -1,23 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '../../../../lib/mongodb';
 import LearningItem from '../../../../models/LearningItem';
-import mongoose from 'mongoose';
 import { requireAuth } from '../../../../lib/middleware';
 
 // GET single item
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: NextRequest, context: any) {
   try {
     const authResult = requireAuth(request);
     if (authResult instanceof NextResponse) {
       return authResult;
     }
+
     const { userId } = authResult;
+    const { id } = context.params;
 
     await connectDB();
-    const item = await LearningItem.findOne({ _id: params.id, userId })
+    const item = await LearningItem.findOne({ _id: id, userId })
       .populate('categoryId', 'name color icon');
 
     if (!item) {
@@ -28,7 +26,7 @@ export async function GET(
     }
 
     return NextResponse.json({ item });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error fetching item:', error);
     return NextResponse.json(
       { error: 'Failed to fetch item' },
@@ -38,21 +36,21 @@ export async function GET(
 }
 
 // PUT update item
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(request: NextRequest, context: any) {
   try {
     const authResult = requireAuth(request);
     if (authResult instanceof NextResponse) {
       return authResult;
     }
+
     const { userId } = authResult;
+    const { id } = context.params;
 
     await connectDB();
     const body = await request.json();
+
     const item = await LearningItem.findOneAndUpdate(
-      { _id: params.id, userId },
+      { _id: id, userId },
       body,
       { new: true, runValidators: true }
     ).populate('categoryId', 'name color icon');
@@ -65,7 +63,7 @@ export async function PUT(
     }
 
     return NextResponse.json({ item });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error updating item:', error);
     return NextResponse.json(
       { error: 'Failed to update item' },
@@ -75,19 +73,21 @@ export async function PUT(
 }
 
 // DELETE item
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: NextRequest, context: any) {
   try {
     const authResult = requireAuth(request);
     if (authResult instanceof NextResponse) {
       return authResult;
     }
+
     const { userId } = authResult;
+    const { id } = context.params;
 
     await connectDB();
-    const item = await LearningItem.findOneAndDelete({ _id: params.id, userId });
+    const item = await LearningItem.findOneAndDelete({
+      _id: id,
+      userId,
+    });
 
     if (!item) {
       return NextResponse.json(
@@ -97,7 +97,7 @@ export async function DELETE(
     }
 
     return NextResponse.json({ message: 'Item deleted successfully' });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error deleting item:', error);
     return NextResponse.json(
       { error: 'Failed to delete item' },
@@ -105,4 +105,3 @@ export async function DELETE(
     );
   }
 }
-
