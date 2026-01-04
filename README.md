@@ -1,4 +1,4 @@
-# Callisto - A Not So Intelligent Progress Tracker
+# Callisto - A Intelligent Progress Tracker
 
 A Next.js application for tracking your learning journey with AI-powered roadmap generation.
 
