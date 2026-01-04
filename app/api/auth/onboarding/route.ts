@@ -7,7 +7,6 @@ export async function POST(request: NextRequest) {
   console.log('onboarding route',request.headers.get('authorization'));
   try {
     const authResult = requireAuth(request);
-    console.log('authResult.userId',authResult.userId);
     if (authResult instanceof NextResponse) {
       return authResult;
     }
@@ -60,4 +59,5 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
 
