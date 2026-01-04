@@ -4,21 +4,21 @@ import Category from '../../../../models/Category';
 import { requireAuth } from '../../../../lib/middleware';
 
 // PUT update category
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(request: NextRequest, context: any) {
   try {
     const authResult = requireAuth(request);
     if (authResult instanceof NextResponse) {
       return authResult;
     }
+
     const { userId } = authResult;
+    const { id } = context.params;
 
     await connectDB();
     const { name, color, icon } = await request.json();
+
     const category = await Category.findOneAndUpdate(
-      { _id: params.id, userId },
+      { _id: id, userId },
       { name, color, icon },
       { new: true, runValidators: true }
     );
@@ -31,7 +31,7 @@ export async function PUT(
     }
 
     return NextResponse.json({ category });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error updating category:', error);
     return NextResponse.json(
       { error: 'Failed to update category' },
@@ -41,19 +41,21 @@ export async function PUT(
 }
 
 // DELETE category
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: NextRequest, context: any) {
   try {
     const authResult = requireAuth(request);
     if (authResult instanceof NextResponse) {
       return authResult;
     }
+
     const { userId } = authResult;
+    const { id } = context.params;
 
     await connectDB();
-    const category = await Category.findOneAndDelete({ _id: params.id, userId });
+    const category = await Category.findOneAndDelete({
+      _id: id,
+      userId,
+    });
 
     if (!category) {
       return NextResponse.json(
@@ -63,7 +65,7 @@ export async function DELETE(
     }
 
     return NextResponse.json({ message: 'Category deleted successfully' });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error deleting category:', error);
     return NextResponse.json(
       { error: 'Failed to delete category' },
@@ -71,4 +73,3 @@ export async function DELETE(
     );
   }
 }
-
