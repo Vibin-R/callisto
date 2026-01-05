@@ -360,73 +360,6 @@ const ItemDetail: React.FC<ItemDetailProps> = ({
                           </span>
                         )}
                       </div>
-                      
-                      <div className="flex items-center space-x-1">
-                        <div className="flex items-center bg-gray-50 dark:bg-gray-700 px-1 rounded-full border border-gray-100 dark:border-gray-600 hover:border-indigo-300 dark:hover:border-indigo-600 transition-all group/deadline shadow-sm">
-                          <LocalizationProvider dateAdapter={AdapterDateFns}>
-                            <DatePicker
-                              value={topic.deadline ? new Date(topic.deadline) : null}
-                              onChange={(newValue: any) => {
-                                if (newValue) {
-                                  const dateStr = newValue.toISOString().split('T')[0];
-                                  onUpdateTopicDeadline(item.id, topic.id, dateStr);
-                                } else {
-                                  onUpdateTopicDeadline(item.id, topic.id, '');
-                                }
-                              }}
-                              slotProps={{
-                                textField: {
-                                  size: 'small',
-                                  sx: {
-                                    '& .MuiOutlinedInput-root': {
-                                      fontSize: '0.6875rem',
-                                      fontWeight: 700,
-                                      height: 'auto',
-                                      minWidth: '120px',
-                                      backgroundColor: 'transparent',
-                                      border: 'none',
-                                      '& fieldset': {
-                                        border: 'none',
-                                      },
-                                      '&:hover fieldset': {
-                                        border: 'none',
-                                      },
-                                      '&.Mui-focused fieldset': {
-                                        border: 'none',
-                                      },
-                                    },
-                                    '& .MuiInputBase-input': {
-                                      fontSize: '10px',
-                                      padding: '0 0.375rem',
-                                      color: overdue 
-                                        ? 'rgb(225 29 72)' 
-                                        : 'inherit',
-                                    },
-                                    'fieldset': {
-                                      border: 'none',
-                                    },
-                                    '& .MuiPickersSectionList-root': {
-                                      border: 'none',
-                                      p:0,
-                                      width: '100%',
-                                    },
-                                  },
-                                },
-                              }}
-                            />
-                          </LocalizationProvider>
-                          {/* {topic.deadline && (
-                            <button
-                              onClick={() => onUpdateTopicDeadline(item.id, topic.id, '')}
-                              className="hidden group-hover/deadline:inline-block opacity-0 group-hover/deadline:opacity-100 transition-all duration-300 ease-out text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400 p-0.5 rounded"
-                              style={{transitionProperty: 'opacity, display'}}
-                              title="Clear deadline"
-                            >
-                              <X size={12} />
-                            </button>
-                          )} */}
-                        </div>
-                      </div>
                     </div>
                     
                     {editingId === topic.id ? (
@@ -457,34 +390,110 @@ const ItemDetail: React.FC<ItemDetailProps> = ({
                   </div>
                   
                   <div className="flex items-center space-x-1 ml-4 self-center">
-                    <button 
-                      onClick={() => toggleNotes(topic.id)}
-                      className={`p-2 rounded-xl transition-all ${expandedNotes[topic.id] ? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400' : 'text-gray-300 dark:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-indigo-500 dark:hover:text-indigo-400'}`}
-                      title="Topic Notes"
-                    >
-                      <StickyNote size={20} />
-                    </button>
-                    <button 
-                      onClick={() => onAddSubTopic(item.id, topic.id)}
-                      className="p-2 text-indigo-300 dark:text-indigo-600 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 rounded-xl transition-all"
-                    >
-                      <Plus size={20} />
-                    </button>
-                    <button 
-                      onClick={() => {
-                        showConfirm({
-                          type: 'warning',
-                          title: 'Delete Module?',
-                          message: 'Are you sure you want to delete this module? This action cannot be undone.',
-                          onConfirm: () => onDeleteTopic(item.id, topic.id),
-                          confirmText: 'Delete',
-                          cancelText: 'Cancel'
-                        });
-                      }}
-                      className="p-2 text-gray-200 dark:text-gray-600 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl transition-all"
-                    >
-                      <Trash2 size={20} />
-                    </button>
+                     <div className="flex items-center space-x-1">
+                        <div className="flex items-center rounded-full outline outline-1 outline-[#d1d5db] transition-all group/deadline shadow-sm">
+                          <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <DatePicker
+                              value={topic.deadline ? new Date(topic.deadline) : null}
+                              onChange={(newValue: any) => {
+                                if (newValue) {
+                                  const dateStr = newValue.toISOString().split('T')[0];
+                                  onUpdateTopicDeadline(item.id, topic.id, dateStr);
+                                } else {
+                                  onUpdateTopicDeadline(item.id, topic.id, '');
+                                }
+                              }}
+                              slotProps={{
+                                textField: {
+                                  size: 'small',
+                                  sx: {
+                                    '& .MuiOutlinedInput-root': {
+                                      fontSize: '10px',
+                                      fontWeight: 700,
+                                      height: 'auto',
+                                      minWidth: '120px',
+                                      backgroundColor: 'transparent',
+                                      border: 'none',
+                                      '& fieldset': {
+                                        border: 'none',
+                                      },
+                                      '&:hover fieldset': {
+                                        border: 'none',
+                                      },
+                                      '&.Mui-focused fieldset': {
+                                        border: 'none',
+                                      },
+                                    },
+                                    '& .MuiInputBase-input': {
+                                      fontSize: '10px',
+                                      padding: '0 0.375rem',
+                                      color: overdue 
+                                        ? 'rgb(225 29 72)' 
+                                        : 'inherit',
+                                    },
+                                    'fieldset': {
+                                      border: 'none',
+                                    },
+                                    '& .MuiPickersSectionList-root': {
+                                      fontSize: '12px',
+                                      border: 'none',
+                                      p:'3px',
+                                      width: '100%',
+                                    },
+                                    '& .MuiSvgIcon-root':{
+                                      fontSize: 18,
+                                      p:'2px'
+                                    },
+                                    '& .MuiButtonBase-root':{
+                                      p:0
+                                    }
+                                  },
+                                },
+                              }}
+                            />
+                          </LocalizationProvider>
+                          {/* {topic.deadline && (
+                            <button
+                              onClick={() => onUpdateTopicDeadline(item.id, topic.id, '')}
+                              className="hidden group-hover/deadline:inline-block opacity-0 group-hover/deadline:opacity-100 transition-all duration-300 ease-out text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400 p-0.5 rounded"
+                              style={{transitionProperty: 'opacity, display'}}
+                              title="Clear deadline"
+                            >
+                              <X size={12} />
+                            </button>
+                          )} */}
+                        </div>
+                      </div>
+                    <div>
+                      <button
+                        onClick={() => toggleNotes(topic.id)}
+                        className={`p-2 rounded-xl transition-all ${expandedNotes[topic.id] ? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400' : 'text-gray-300 dark:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-indigo-500 dark:hover:text-indigo-400'}`}
+                        title="Topic Notes"
+                      >
+                        <StickyNote size={20} />
+                      </button>
+                      <button
+                        onClick={() => onAddSubTopic(item.id, topic.id)}
+                        className="p-2 text-indigo-300 dark:text-indigo-600 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 rounded-xl transition-all"
+                      >
+                        <Plus size={20} />
+                      </button>
+                      <button
+                        onClick={() => {
+                          showConfirm({
+                            type: 'warning',
+                            title: 'Delete Module?',
+                            message: 'Are you sure you want to delete this module? This action cannot be undone.',
+                            onConfirm: () => onDeleteTopic(item.id, topic.id),
+                            confirmText: 'Delete',
+                            cancelText: 'Cancel'
+                          });
+                        }}
+                        className="p-2 text-gray-200 dark:text-gray-600 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl transition-all"
+                      >
+                        <Trash2 size={20} />
+                      </button>
+                    </div>
                   </div>
                 </div>
 
