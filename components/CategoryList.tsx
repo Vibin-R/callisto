@@ -8,7 +8,7 @@ import { useAlert } from '../contexts/AlertContext';
 
 interface CategoryListProps {
   state: LearningState;
-  onAddItem: (catId: string, name: string, desc: string, topics: Topic[]) => string;
+  onAddItem: (catId: string, name: string, desc: string, topics: Topic[]) => Promise<string | null>;
   onAddCategory: (name: string, color: string) => void;
   onUpdateCategory: (id: string, name: string, color: string) => void;
   onDeleteCategory: (id: string) => void;
