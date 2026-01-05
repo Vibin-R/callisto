@@ -155,7 +155,7 @@ export default function Home() {
 
   const addItem = async (categoryId: string, name: string, description: string, topics: Topic[] = []) => {
     try {
-      const response = await fetch('/apis', {
+      const response = await fetch('/api/items', {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify({ categoryId, name, description, topics })
